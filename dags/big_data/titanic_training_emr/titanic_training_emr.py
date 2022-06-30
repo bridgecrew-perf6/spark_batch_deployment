@@ -12,7 +12,7 @@ year_month_day_hour_minute_second = datetime.utcnow().strftime("%Y%d%m_%H%M%S")
 
 with DAG(
         dag_id="titanic_training_emr",
-        # schedule_interval="@daily",
+        # schedule_interval="@monthly",
         schedule_interval="@once",
         default_args={
             "owner": "cesar_charalla_olazo",
@@ -37,7 +37,7 @@ with DAG(
 
     step_training = EmrAddStepsOperator(
         task_id="titanic_training",
-        job_flow_id='j-1KYXO6IJYDRMN',
+        job_flow_id='j-127WDRGOEZ63V',
         aws_conn_id='s3_default',
         steps=build_spark_submit(pipeline_type="training",
                                  model_name="{{ task_instance.xcom_pull(key='current_titanic_model_name') }}"),
@@ -46,7 +46,7 @@ with DAG(
 
     checker_training = EmrStepSensor(
         task_id="checker_titanic_training",
-        job_flow_id='j-1KYXO6IJYDRMN',
+        job_flow_id='j-127WDRGOEZ63V',
         aws_conn_id='s3_default',
         step_id="{{ task_instance.xcom_pull(task_ids='titanic_training', key='return_value')["
                 + str(0)

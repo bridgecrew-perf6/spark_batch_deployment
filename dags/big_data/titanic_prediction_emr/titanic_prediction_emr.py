@@ -31,7 +31,7 @@ with DAG(
 
     step_prediction = EmrAddStepsOperator(
         task_id="titanic_prediction",
-        job_flow_id='j-1KYXO6IJYDRMN',
+        job_flow_id='j-127WDRGOEZ63V',
         aws_conn_id='s3_default',
         steps=build_spark_submit(pipeline_type="prediction",
                                  model_name="{{ task_instance.xcom_pull(dag_id='titanic_training_emr', "
@@ -43,7 +43,7 @@ with DAG(
 
     checker_prediction = EmrStepSensor(
         task_id="checker_prediction",
-        job_flow_id='j-1KYXO6IJYDRMN',
+        job_flow_id='j-127WDRGOEZ63V',
         aws_conn_id='s3_default',
         step_id="{{ task_instance.xcom_pull(task_ids='titanic_prediction', key='return_value')["
                 + str(0)
